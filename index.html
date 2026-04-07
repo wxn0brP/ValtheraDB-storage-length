@@ -1,0 +1,171 @@
+<!DOCTYPE html><html class="default" lang="en" data-base="./"><head><meta charset="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>@wxn0brp/db-storage-length</title><meta name="description" content="Documentation for @wxn0brp/db-storage-length"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="assets/style.css"/><link rel="stylesheet" href="assets/highlight.css"/><script defer src="assets/main.js"></script><script async src="assets/icons.js" id="tsd-icons-script"></script><script async src="assets/search.js" id="tsd-search-script"></script><script async src="assets/navigation.js" id="tsd-nav-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os";document.body.style.display="none";setTimeout(() => window.app?app.showPage():document.body.style.removeProperty("display"),500)</script><header class="tsd-page-toolbar"><div class="tsd-toolbar-contents container"><a href="index.html" class="title">@wxn0brp/db-storage-length</a><div id="tsd-toolbar-links"></div><button id="tsd-search-trigger" class="tsd-widget" aria-label="Search"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="assets/icons.svg#icon-search"></use></svg></button><dialog id="tsd-search" aria-label="Search"><input role="combobox" id="tsd-search-input" aria-controls="tsd-search-results" aria-autocomplete="list" aria-expanded="true" autocapitalize="off" autocomplete="off" placeholder="Search the docs" maxLength="100"/><ul role="listbox" id="tsd-search-results"></ul><div id="tsd-search-status" aria-live="polite" aria-atomic="true"><div>Preparing search index...</div></div></dialog><a href="#" class="tsd-widget menu" id="tsd-toolbar-menu-trigger" data-toggle="menu" aria-label="Menu"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="assets/icons.svg#icon-menu"></use></svg></a></div></header><div class="container container-main"><div class="col-content"><div class="tsd-page-title"><h1>@wxn0brp/db-storage-length</h1></div><div class="tsd-panel tsd-typography"><h1 id="wxn0brpdb-storage-length" class="tsd-anchor-link">@wxn0brp/db-storage-length<a href="#wxn0brpdb-storage-length" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h1>
+<p>Storage adapter for ValtheraDB that reads and writes <strong>fixed-length record files</strong> (.dat and similar formats common in legacy/embedded systems).</p>
+<p>Every record has a statically-defined schema where each field occupies an exact number of bytes. Binary numeric types (uint8, int32le, float64be, etc) are supported alongside plain UTF-8 text fields.</p>
+<h2 id="installation" class="tsd-anchor-link">Installation<a href="#installation" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<pre><code class="bash"><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">i</span><span class="hl-1"> </span><span class="hl-2">github:wxn0brP/ValtheraDB-storage-length#dist</span>
+</code><button type="button">Copy</button></pre>
+
+<h2 id="quick-start" class="tsd-anchor-link">Quick start<a href="#quick-start" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<pre><code class="typescript"><span class="hl-3">import</span><span class="hl-1"> { </span><span class="hl-4">createLengthValthera</span><span class="hl-1"> } </span><span class="hl-3">from</span><span class="hl-1"> </span><span class="hl-2">&quot;@wxn0brp/db-storage-length&quot;</span><span class="hl-1">;</span><br/><br/><span class="hl-5">const</span><span class="hl-1"> </span><span class="hl-6">db</span><span class="hl-1"> = </span><span class="hl-0">createLengthValthera</span><span class="hl-1">({</span><br/><span class="hl-1">    </span><span class="hl-4">dir:</span><span class="hl-1"> </span><span class="hl-2">&quot;./data&quot;</span><span class="hl-1">,</span><br/><span class="hl-1">    </span><span class="hl-4">schemas:</span><span class="hl-1"> {</span><br/><span class="hl-1">        </span><span class="hl-7">// You can provide either:</span><br/><span class="hl-1">        </span><span class="hl-7">// - FieldType (e.g. &quot;uint32le&quot;, &quot;float64le&quot;) - size is auto-detected</span><br/><span class="hl-1">        </span><span class="hl-7">// - number (byte length) - treated as string field</span><br/><span class="hl-1">        </span><span class="hl-4">users:</span><span class="hl-1"> [</span><br/><span class="hl-1">            [</span><span class="hl-2">&quot;id&quot;</span><span class="hl-1">,    </span><span class="hl-2">&quot;uint32le&quot;</span><span class="hl-1">],      </span><span class="hl-7">// 4 bytes, little-endian uint32</span><br/><span class="hl-1">            [</span><span class="hl-2">&quot;name&quot;</span><span class="hl-1">,  </span><span class="hl-8">32</span><span class="hl-1">],              </span><span class="hl-7">// 32-byte string (space-padded, trimmed)</span><br/><span class="hl-1">            [</span><span class="hl-2">&quot;age&quot;</span><span class="hl-1">,   </span><span class="hl-2">&quot;uint16le&quot;</span><span class="hl-1">],      </span><span class="hl-7">// 2 bytes, little-endian uint16</span><br/><span class="hl-1">            [</span><span class="hl-2">&quot;score&quot;</span><span class="hl-1">, </span><span class="hl-2">&quot;float64le&quot;</span><span class="hl-1">],     </span><span class="hl-7">// 8 bytes, little-endian float64</span><br/><span class="hl-1">        ],</span><br/><span class="hl-1">    },</span><br/><span class="hl-1">});</span><br/><br/><span class="hl-7">// Read all records from data/users.dat</span><br/><span class="hl-5">const</span><span class="hl-1"> </span><span class="hl-6">users</span><span class="hl-1"> = </span><span class="hl-3">await</span><span class="hl-1"> </span><span class="hl-4">db</span><span class="hl-1">.</span><span class="hl-0">c</span><span class="hl-1">(</span><span class="hl-2">&quot;users&quot;</span><span class="hl-1">).</span><span class="hl-0">find</span><span class="hl-1">();</span><br/><br/><span class="hl-7">// Add a record</span><br/><span class="hl-3">await</span><span class="hl-1"> </span><span class="hl-4">db</span><span class="hl-1">.</span><span class="hl-0">c</span><span class="hl-1">(</span><span class="hl-2">&quot;users&quot;</span><span class="hl-1">).</span><span class="hl-0">add</span><span class="hl-1">({ </span><span class="hl-4">id:</span><span class="hl-1"> </span><span class="hl-8">1</span><span class="hl-1">, </span><span class="hl-4">name:</span><span class="hl-1"> </span><span class="hl-2">&quot;Alice&quot;</span><span class="hl-1">, </span><span class="hl-4">age:</span><span class="hl-1"> </span><span class="hl-8">30</span><span class="hl-1">, </span><span class="hl-4">score:</span><span class="hl-1"> </span><span class="hl-8">99.5</span><span class="hl-1"> });</span>
+</code><button type="button">Copy</button></pre>
+
+<h2 id="options" class="tsd-anchor-link">Options<a href="#options" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>dir</td>
+<td>string</td>
+<td>Directory where .dat files are stored. File name = <collection>.<ext>.</td>
+</tr>
+<tr>
+<td>file</td>
+<td>string</td>
+<td>Path to a single fixed file (overrides dir).</td>
+</tr>
+<tr>
+<td>schemas</td>
+<td>Record&lt;string, Schema[]&gt;</td>
+<td>Schema definitions per collection (required).</td>
+</tr>
+<tr>
+<td>ext</td>
+<td>string</td>
+<td>File extension when using dir. Defaults to &quot;dat&quot;.</td>
+</tr>
+</tbody>
+</table>
+<p>Exactly one of file or dir must be provided.</p>
+<h2 id="schema" class="tsd-anchor-link">Schema<a href="#schema" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<pre><code class="typescript"><span class="hl-5">type</span><span class="hl-1"> </span><span class="hl-9">FieldDefinition</span><span class="hl-1"> = </span><span class="hl-9">FieldType</span><span class="hl-1"> | </span><span class="hl-9">number</span><span class="hl-1">;</span><br/><span class="hl-5">type</span><span class="hl-1"> </span><span class="hl-9">Schema</span><span class="hl-1"> = [</span><span class="hl-10">fieldName</span><span class="hl-1">: </span><span class="hl-9">string</span><span class="hl-1">, </span><span class="hl-10">fieldDefinition</span><span class="hl-1">: </span><span class="hl-9">FieldDefinition</span><span class="hl-1">];</span>
+</code><button type="button">Copy</button></pre>
+
+<p>Each tuple defines one field in a row. Rows are fixed-size - the total row length is the sum of all field byte lengths.</p>
+<p>You can provide either:</p>
+<ul>
+<li>A <strong>number</strong> - treated as string field with that byte length (space-padded, trimmed on read)</li>
+<li>A <strong>negative number</strong> - raw string mode, direct read/write without padding or trimming (use <code>Math.abs(number)</code> as length)</li>
+<li>A <strong>FieldType</strong> - binary type with automatic size detection (e.g. &quot;uint32le&quot;, &quot;float64be&quot;)</li>
+</ul>
+<p><strong>Examples:</strong></p>
+<pre><code class="typescript"><span class="hl-10">schemas</span><span class="hl-1">: {</span><br/><span class="hl-1">    </span><span class="hl-10">users</span><span class="hl-1">: [</span><br/><span class="hl-1">        [</span><span class="hl-2">&quot;name&quot;</span><span class="hl-1">, </span><span class="hl-8">32</span><span class="hl-1">],       </span><span class="hl-7">// 32-byte string, space-padded, trimmed on read</span><br/><span class="hl-1">        [</span><span class="hl-2">&quot;raw&quot;</span><span class="hl-1">, -</span><span class="hl-8">32</span><span class="hl-1">],       </span><span class="hl-7">// 32-byte raw string, no padding, no trimming</span><br/><span class="hl-1">        [</span><span class="hl-2">&quot;age&quot;</span><span class="hl-1">, </span><span class="hl-2">&quot;uint8&quot;</span><span class="hl-1">],   </span><span class="hl-7">// 1-byte unsigned int</span><br/><span class="hl-1">    ],</span><br/><span class="hl-1">}</span>
+</code><button type="button">Copy</button></pre>
+
+<h3 id="field-types" class="tsd-anchor-link">Field types<a href="#field-types" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Bytes</th>
+<th>JS value</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>&quot;string&quot;</td>
+<td>any</td>
+<td>string</td>
+<td>UTF-8</td>
+</tr>
+<tr>
+<td>&quot;uint8&quot;</td>
+<td>1</td>
+<td>number</td>
+<td></td>
+</tr>
+<tr>
+<td>&quot;int8&quot;</td>
+<td>1</td>
+<td>number</td>
+<td></td>
+</tr>
+<tr>
+<td>&quot;uint16le&quot;</td>
+<td>2</td>
+<td>number</td>
+<td>Little-endian</td>
+</tr>
+<tr>
+<td>&quot;uint16be&quot;</td>
+<td>2</td>
+<td>number</td>
+<td>Big-endian</td>
+</tr>
+<tr>
+<td>&quot;int16le&quot;</td>
+<td>2</td>
+<td>number</td>
+<td></td>
+</tr>
+<tr>
+<td>&quot;int16be&quot;</td>
+<td>2</td>
+<td>number</td>
+<td></td>
+</tr>
+<tr>
+<td>&quot;uint32le&quot;</td>
+<td>4</td>
+<td>number</td>
+<td></td>
+</tr>
+<tr>
+<td>&quot;uint32be&quot;</td>
+<td>4</td>
+<td>number</td>
+<td></td>
+</tr>
+<tr>
+<td>&quot;int32le&quot;</td>
+<td>4</td>
+<td>number</td>
+<td></td>
+</tr>
+<tr>
+<td>&quot;int32be&quot;</td>
+<td>4</td>
+<td>number</td>
+<td></td>
+</tr>
+<tr>
+<td>&quot;float32le&quot;</td>
+<td>4</td>
+<td>number</td>
+<td>Single-precision float</td>
+</tr>
+<tr>
+<td>&quot;float32be&quot;</td>
+<td>4</td>
+<td>number</td>
+<td></td>
+</tr>
+<tr>
+<td>&quot;float64le&quot;</td>
+<td>8</td>
+<td>number</td>
+<td>Double-precision float</td>
+</tr>
+<tr>
+<td>&quot;float64be&quot;</td>
+<td>8</td>
+<td>number</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>Endianness: le = little-endian, be = big-endian.</p>
+<h2 id="low-level-api" class="tsd-anchor-link">Low-level API<a href="#low-level-api" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<p>You can use DbStorageLength directly without the ValtheraDB wrapper:</p>
+<pre><code class="typescript"><span class="hl-3">import</span><span class="hl-1"> { </span><span class="hl-4">DbStorageLength</span><span class="hl-1"> } </span><span class="hl-3">from</span><span class="hl-1"> </span><span class="hl-2">&quot;@wxn0brp/db-storage-length/action&quot;</span><span class="hl-1">;</span><br/><br/><span class="hl-5">const</span><span class="hl-1"> </span><span class="hl-6">storage</span><span class="hl-1"> = </span><span class="hl-5">new</span><span class="hl-1"> </span><span class="hl-0">DbStorageLength</span><span class="hl-1">({</span><br/><span class="hl-1">    </span><span class="hl-4">dir:</span><span class="hl-1"> </span><span class="hl-2">&quot;./data&quot;</span><span class="hl-1">,</span><br/><span class="hl-1">    </span><span class="hl-4">schemas:</span><span class="hl-1"> {</span><br/><span class="hl-1">        </span><span class="hl-4">sensors:</span><span class="hl-1"> [</span><br/><span class="hl-1">            [</span><span class="hl-2">&quot;timestamp&quot;</span><span class="hl-1">, </span><span class="hl-2">&quot;uint32le&quot;</span><span class="hl-1">],    </span><span class="hl-7">// 4 bytes</span><br/><span class="hl-1">            [</span><span class="hl-2">&quot;value&quot;</span><span class="hl-1">,     </span><span class="hl-2">&quot;float32le&quot;</span><span class="hl-1">],   </span><span class="hl-7">// 4 bytes</span><br/><span class="hl-1">            [</span><span class="hl-2">&quot;label&quot;</span><span class="hl-1">,     </span><span class="hl-8">16</span><span class="hl-1">],            </span><span class="hl-7">// 16-byte string</span><br/><span class="hl-1">        ],</span><br/><span class="hl-1">    },</span><br/><span class="hl-1">});</span><br/><br/><span class="hl-5">const</span><span class="hl-1"> </span><span class="hl-6">rows</span><span class="hl-1"> = </span><span class="hl-3">await</span><span class="hl-1"> </span><span class="hl-4">storage</span><span class="hl-1">.</span><span class="hl-0">read</span><span class="hl-1">(</span><span class="hl-2">&quot;sensors&quot;</span><span class="hl-1">);</span><br/><span class="hl-7">// [{ timestamp: 1712345678, value: 23.5 }, ...]</span><br/><span class="hl-3">await</span><span class="hl-1"> </span><span class="hl-4">storage</span><span class="hl-1">.</span><span class="hl-0">write</span><span class="hl-1">(</span><span class="hl-2">&quot;sensors&quot;</span><span class="hl-1">, </span><span class="hl-4">rows</span><span class="hl-1">);</span>
+</code><button type="button">Copy</button></pre>
+
+<h2 id="license" class="tsd-anchor-link">License<a href="#license" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<p>MIT</p>
+</div></div><div class="col-sidebar"><div class="page-menu"><div class="tsd-navigation settings"><details class="tsd-accordion"><summary class="tsd-accordion-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="assets/icons.svg#icon-chevronDown"></use></svg><h3>Settings</h3></summary><div class="tsd-accordion-details"><div class="tsd-filter-visibility"><span class="settings-label">Member Visibility</span><ul id="tsd-filter-options"><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-protected" name="protected"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Protected</span></label></li><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-inherited" name="inherited" checked/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Inherited</span></label></li><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-external" name="external"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>External</span></label></li></ul></div><div class="tsd-theme-toggle"><label class="settings-label" for="tsd-theme">Theme</label><select id="tsd-theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></div></div></details></div><details open class="tsd-accordion tsd-page-navigation"><summary class="tsd-accordion-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="assets/icons.svg#icon-chevronDown"></use></svg><h3>On This Page</h3></summary><div class="tsd-accordion-details"><a href="#wxn0brpdb-storage-length"><span>@wxn0brp/db-<wbr/>storage-<wbr/>length</span></a><ul><li><a href="#installation"><span>Installation</span></a></li><li><a href="#quick-start"><span>Quick start</span></a></li><li><a href="#options"><span>Options</span></a></li><li><a href="#schema"><span>Schema</span></a></li><li><ul><li><a href="#field-types"><span>Field types</span></a></li></ul></li><li><a href="#low-level-api"><span>Low-<wbr/>level <wbr/>API</span></a></li><li><a href="#license"><span>License</span></a></li></ul></div></details></div><div class="site-menu"><nav class="tsd-navigation"><a href="modules.html">@wxn0brp/db-storage-length</a><ul class="tsd-small-nested-navigation" id="tsd-nav-container"><li>Loading...</li></ul></nav></div></div></div><footer><p class="tsd-generator">Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></footer><div class="overlay"></div></body></html>
