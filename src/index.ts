@@ -6,3 +6,7 @@ export function createLengthValthera(opts: Opts) {
         dbAction: new DbStorageLength(opts)
     });
 }
+
+export const DYNAMIC = {
+    length: (opts: Opts) => new DbStorageLength(opts)
+}
