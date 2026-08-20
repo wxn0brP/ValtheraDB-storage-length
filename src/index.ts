@@ -3,7 +3,7 @@ import { DbStorageLength, Opts } from "./action";
 
 export function createLengthValthera(opts: Opts) {
     return new ValtheraClass({
-        dbAction: new DbStorageLength(opts)
+        adapter: new DbStorageLength(opts)
     });
 }
 
